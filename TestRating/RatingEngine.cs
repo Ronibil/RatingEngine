@@ -8,22 +8,26 @@ namespace TestRating
     /// </summary>
     public class RatingEngine
     {
+        private readonly IPolicy _policy;
+        private readonly IPolicyRater _rater;
         public decimal Rating { get; set; }
+        public RatingEngine(IPolicy policy, IPolicyRater rater)
+        {
+            _policy = policy;
+            _rater = rater;
+        }
         public void Rate()
         {
             try
             {
                 ConsoleOutput.ShowStartRating();
 
-                IPolicy policy = PolicySerializer.DeserializePolicy();
-
-                IPolicyRater rater = PolicySpecifier.CreateRater(policy);
-                if (rater == null)
+                if (_rater == null)
                 {
                     Console.WriteLine("Unknown policy type.");
                     return;
                 }
-                Rating = rater.CalculatePolicyRating(policy);
+                Rating = _rater.CalculatePolicyRating(_policy);
 
                 ConsoleOutput.ShowCompleteRating();
             }

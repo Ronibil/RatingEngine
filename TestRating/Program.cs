@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace TestRating
 {
@@ -10,7 +11,12 @@ namespace TestRating
             {
                 ConsoleOutput.ShowStartMessage();
 
-                RatingEngine engine = new RatingEngine();
+                string policyJson = File.ReadAllText("policy.json");
+                IPolicy policy = PolicySerializer.DeserializePolicy(policyJson);
+
+                IPolicyRater rater = PolicySpecifier.CreateRater(policy);
+
+                RatingEngine engine = new RatingEngine(policy, rater);
                 engine.Rate();
 
                 ConsoleOutput.ShowRating(engine.Rating);

@@ -8,12 +8,10 @@ namespace TestRating
 {
     public class PolicySerializer
     {
-        public static IPolicy DeserializePolicy()
+        public static IPolicy DeserializePolicy(string policyJson)
         {
             try
             {
-                string policyJson = File.ReadAllText("policy.json");
-
                 PolicyType policyType = JObject.Parse(policyJson)["type"].ToObject<PolicyType>();
 
                 IPolicy policy = null;
